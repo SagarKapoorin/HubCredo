@@ -14,12 +14,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error: unknown) {
       let message = "Request failed";
       if (typeof error === "object" && error !== null && "response" in error) {
-        const anyError = error as { response?: { data?: unknown } };
+        const anyError = error as { response?: { status?: number; data?: unknown } };
+        const status = anyError.response?.status;
         const data = anyError.response?.data;
-        if (typeof data === "string") {
+
+        // For auth failures we want a clear, consistent message
+        if (status === 400 || status === 401) {
+          message = "Invalid credentials";
+        } else if (typeof data === "string") {
           message = data;
-        } else if (data && typeof data === "object" && "message" in data && typeof (data as { message?: unknown }).message === "string") {
+        } else if (
+          data &&
+          typeof data === "object" &&
+          "message" in data &&
+          typeof (data as { message?: unknown }).message === "string"
+        ) {
           message = (data as { message: string }).message;
+        } else if (
+          data &&
+          typeof data === "object" &&
+          "error" in data &&
+          typeof (data as { error?: unknown }).error === "string"
+        ) {
+          message = (data as { error: string }).error;
         }
       } else if (error instanceof Error) {
         message = error.message;
