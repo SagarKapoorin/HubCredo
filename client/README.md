@@ -1,73 +1,86 @@
-# React + TypeScript + Vite
+HubCredo Client
+===============
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite frontend for the HubCredo authentication flow. It provides signup and login screens, a protected dashboard, and communicates with the HubCredo backend using JWTs in HttpOnly cookies.
 
-Currently, two official plugins are available:
+Stack
+-----
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Framework: React 19
+- Router: React Router
+- Language: TypeScript
+- Build tool: Vite
+- Styling: Tailwind CSS v4
+- Forms & validation: React Hook Form + Zod
+- HTTP client: Axios (via `src/lib/apiClient.ts`)
 
-## React Compiler
+Features
+--------
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Signup and login pages with client-side validation
+- Protected `/dashboard` route using an auth context and `ProtectedRoute`
+- Authentication via the backend `/api/auth/signup` and `/api/auth/login` endpoints
+- API base URL configured via `VITE_API_BASE_URL` (defaults to `http://localhost:4000`)
 
-## Expanding the ESLint configuration
+Getting Started
+---------------
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Prerequisites:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js LTS
+- HubCredo backend running (see `../server/README.md`)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Install dependencies:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd client
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Environment
+-----------
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The API client reads `VITE_API_BASE_URL` from the environment. Create a `.env` (or `.env.local`) file in `client/`:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+VITE_API_BASE_URL=http://localhost:4000
 ```
+
+If this variable is not set, the client falls back to `http://localhost:4000`.
+
+Running the App
+---------------
+
+Development:
+
+```bash
+cd client
+npm run dev
+```
+
+The app will be available at `http://localhost:5173` by default.
+
+Production build and preview:
+
+```bash
+cd client
+npm run build
+npm run preview
+```
+
+This builds the app to `dist/` and serves it locally for inspection.
+
+Auth Flow Overview
+------------------
+
+- **Signup**: `POST /api/auth/signup` with `{ name, email, password }`
+- **Login**: `POST /api/auth/login` with `{ email, password }`
+
+On success, the backend sets an HttpOnly `token` cookie. The client then treats the user as authenticated and allows access to the dashboard route.
+
+Author
+------
+
+Made by **Sagar Kapoor**  
+Email: `sagarbadal70@gmail.com`
+

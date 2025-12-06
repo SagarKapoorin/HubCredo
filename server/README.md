@@ -68,7 +68,7 @@ Required variables:
 Running the Server
 ------------------
 
-Development:
+Build and run:
 
 ```bash
 cd server
