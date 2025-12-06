@@ -18,6 +18,10 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 
+app.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
