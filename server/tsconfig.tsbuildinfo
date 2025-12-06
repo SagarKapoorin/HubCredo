@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/controllers/authcontroller.ts","./src/lib/redisclient.ts","./src/middleware/errorhandler.ts","./src/middleware/validaterequest.ts","./src/models/user.ts","./src/routes/authroutes.ts","./src/services/authservice.ts","./src/validation/authschemas.ts"],"version":"5.9.3"}
